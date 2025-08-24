@@ -1,0 +1,28 @@
+
+**`src/energy_monitor.py`** (sample)
+```python
+import pandas as pd
+import random
+import time
+
+# Simulate IoT energy sensor data
+def generate_energy_data():
+    return {
+        "voltage": round(random.uniform(210, 250), 2),
+        "current": round(random.uniform(0.5, 5.0), 2),
+        "power": 0
+    }
+
+# Save to CSV
+def log_data(file="data/sample_energy_data.csv"):
+    df = pd.DataFrame(columns=["voltage", "current", "power"])
+    for _ in range(20):  # Simulate 20 readings
+        d = generate_energy_data()
+        d["power"] = round(d["voltage"] * d["current"] / 1000, 3)
+        df = pd.concat([df, pd.DataFrame([d])], ignore_index=True)
+        time.sleep(0.5)
+    df.to_csv(file, index=False)
+    print(f"Data logged to {file}")
+
+if __name__ == "__main__":
+    log_data()
